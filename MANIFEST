@@ -1,0 +1,15 @@
+Build.PL
+Changes
+lib/Test/Async/HTTP.pm
+MANIFEST			This list of files
+t/00use.t
+t/01request.t
+t/02request-content.t
+t/03on_header.t
+t/04concurrent.t
+t/99pod.t
+Makefile.PL
+README
+LICENSE
+META.yml
+META.json
