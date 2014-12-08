@@ -22,6 +22,18 @@ METHODS
     * SSL
         These arguments are entirely ignored.
 
+  $response = $http->GET( $uri, %args )->get
+  $response = $http->HEAD( $uri, %args )->get
+  $response = $http->PUT( $uri, $content, %args )->get
+  $response = $http->POST( $uri, $content, %args )->get
+    Convenient wrappers for using the `GET', `HEAD', `PUT' or `POST' methods
+    with a `URI' object and few if any other arguments, returning a
+    `Future'.
+
+    Remember that `POST' with non-form data (as indicated by a plain scalar
+    instead of an `ARRAY' reference of form data name/value pairs) needs a
+    `content_type' key in `%args'.
+
   $p = $http->next_pending
     Returns the next pending request wrapper object if one is outstanding
     (due to an earlier call to `do_request'), or `undef'.

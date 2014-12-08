@@ -8,7 +8,9 @@ package Test::Async::HTTP;
 use strict;
 use warnings;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
+
+use HTTP::Request;
 
 =head1 NAME
 
@@ -65,6 +67,13 @@ sub do_request
    my $self = shift;
    my %args = @_;
 
+   if( !exists $args{request} ) {
+      my $request = $args{request} = HTTP::Request->new(
+         delete $args{method}, delete $args{uri}
+      );
+      $request->content( delete $args{content} ) if exists $args{content};
+   }
+
    my $pending = Test::Async::HTTP::Pending->new(
       request   => delete $args{request},
       content   => delete $args{request_body},
@@ -91,6 +100,51 @@ sub do_request
    push @{ $self->{next} }, $pending;
 
    return $pending->response;
+}
+
+=head2 $response = $http->GET( $uri, %args )->get
+
+=head2 $response = $http->HEAD( $uri, %args )->get
+
+=head2 $response = $http->PUT( $uri, $content, %args )->get
+
+=head2 $response = $http->POST( $uri, $content, %args )->get
+
+Convenient wrappers for using the C<GET>, C<HEAD>, C<PUT> or C<POST> methods
+with a C<URI> object and few if any other arguments, returning a C<Future>.
+
+Remember that C<POST> with non-form data (as indicated by a plain scalar
+instead of an C<ARRAY> reference of form data name/value pairs) needs a
+C<content_type> key in C<%args>.
+
+=cut
+
+sub GET
+{
+   my $self = shift;
+   my ( $uri, @args ) = @_;
+   return $self->do_request( method => "GET", uri => $uri, @args );
+}
+
+sub HEAD
+{
+   my $self = shift;
+   my ( $uri, @args ) = @_;
+   return $self->do_request( method => "HEAD", uri => $uri, @args );
+}
+
+sub PUT
+{
+   my $self = shift;
+   my ( $uri, $content, @args ) = @_;
+   return $self->do_request( method => "PUT", uri => $uri, content => $content, @args );
+}
+
+sub POST
+{
+   my $self = shift;
+   my ( $uri, $content, @args ) = @_;
+   return $self->do_request( method => "POST", uri => $uri, content => $content, @args );
 }
 
 =head2 $p = $http->next_pending

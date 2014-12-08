@@ -31,7 +31,7 @@
    "provides" : {
       "Test::Async::HTTP" : {
          "file" : "lib/Test/Async/HTTP.pm",
-         "version" : "0.01"
+         "version" : "0.02"
       },
       "Test::Async::HTTP::Pending" : {
          "file" : "lib/Test/Async/HTTP.pm"
@@ -44,5 +44,5 @@
       ],
       "x_IRC" : "irc://irc.perl.org/#io-async"
    },
-   "version" : "0.01"
+   "version" : "0.02"
 }
